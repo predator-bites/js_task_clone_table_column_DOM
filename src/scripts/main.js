@@ -6,9 +6,9 @@ const tHead = document.querySelector('table thead');
 
 function getVertLine(tableBody, tableHead, tableFoot, lineIndex) {
   if (
-    typeof tableBody !== 'object' ||
-    typeof tableHead !== 'object' ||
-    typeof tableFoot !== 'object' ||
+    typeof tableBody !== 'object' &&
+    typeof tableHead !== 'object' &&
+    typeof tableFoot !== 'object' &&
     typeof lineIndex !== 'number'
   ) {
     return null;
@@ -63,6 +63,14 @@ function pasteLine(
   }
 }
 
+function getIndex(tableElem) {
+  const headerRow = [...tableElem.rows][0];
+
+  return headerRow.cells.length - 1;
+}
+
+const inxToPaste = getIndex(tBody);
+
 const line = getVertLine(tBody, tHead, tFoot, 1);
 
-pasteLine(tBody, tHead, tFoot, line, 4);
+pasteLine(tBody, tHead, tFoot, line, inxToPaste);
