@@ -6,9 +6,9 @@ const tHead = document.querySelector('table thead');
 
 function getVertLine(tableBody, tableHead, tableFoot, lineIndex) {
   if (
-    typeof tableBody !== 'object' &&
-    typeof tableHead !== 'object' &&
-    typeof tableFoot !== 'object' &&
+    typeof tableBody !== 'object' ||
+    typeof tableHead !== 'object' ||
+    typeof tableFoot !== 'object' ||
     typeof lineIndex !== 'number'
   ) {
     return null;
@@ -19,7 +19,7 @@ function getVertLine(tableBody, tableHead, tableFoot, lineIndex) {
   const bodyElems = rows.map((tr) => {
     const neededTd = tr.cells[lineIndex];
 
-    if (neededTd !== null || typeof neededTd !== 'undefined') {
+    if (neededTd !== null && typeof neededTd !== 'undefined') {
       return neededTd;
     }
 
@@ -47,11 +47,24 @@ function pasteLine(
   const headerCellToMove = headerRow.cells[indexToPaste];
   const footerCellToMove = footerRow.cells[indexToPaste];
 
+  if (
+    typeof headerCellToMove === 'undefined' ||
+    headerCellToMove === null ||
+    typeof footerCellToMove === 'undefined' ||
+    footerCellToMove === null
+  ) {
+    return;
+  }
+
   headerCellToMove.insertAdjacentElement('beforebegin', thHead.cloneNode(true));
   footerCellToMove.insertAdjacentElement('beforebegin', thFoot.cloneNode(true));
 
   if (bodyRows.length === tdsBody.length) {
     for (let i = 0; i < tdsBody.length; i++) {
+      if (typeof tdsBody[i] === 'undefined' && tdsBody[i] === null) {
+        continue;
+      }
+
       const tdToMove = bodyRows[i].cells[indexToPaste];
 
       if (typeof tdToMove !== 'object') {
